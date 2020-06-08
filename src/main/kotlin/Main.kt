@@ -1,5 +1,5 @@
-import dashboard.DashboardPage
-import dashboard.DashboardPresenter
+import views.dashboard.DashboardPage
+import views.dashboard.DashboardPresenter
 
 fun main(args: Array<String>) {
     val dashboardPresenter = DashboardPresenter()

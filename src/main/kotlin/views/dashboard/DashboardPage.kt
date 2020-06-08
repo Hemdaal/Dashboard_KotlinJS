@@ -1,8 +1,7 @@
-package dashboard
+package views.dashboard
 
-import login.LoginPage
-import login.LoginPresenter
-import signup.SignupPage
+import views.login.LoginPage
+import views.login.LoginPresenter
 
 class DashboardPage(private val dashboardPresenter: DashboardContract.Presenter) : DashboardContract.View {
 

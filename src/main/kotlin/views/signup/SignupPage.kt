@@ -1,16 +1,14 @@
-package signup
+package views.signup
 
-import lineBreak
-import login.LoginPage
-import login.LoginPresenter
+import utils.lineBreak
+import views.login.LoginPage
+import views.login.LoginPresenter
 import org.w3c.dom.*
-import register.SignupContract
-import register.SignupPresenter
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
 
-class SignupPage(val signupPresenter: SignupPresenter) : SignupContract.View {
+class SignupPage(private val signupPresenter: SignupPresenter) : SignupContract.View {
 
     private val content = document.getElementById("app") as HTMLDivElement
 
@@ -22,16 +20,10 @@ class SignupPage(val signupPresenter: SignupPresenter) : SignupContract.View {
         id = "message"
     }
 
-    private val firstNameElement = (document.createElement("input") as HTMLInputElement).apply {
+    private val nameElement = (document.createElement("input") as HTMLInputElement).apply {
         type = "text"
-        placeholder = "First Name"
-        id = "first_name"
-    }
-
-    private val lastNameElement = (document.createElement("input") as HTMLInputElement).apply {
-        type = "text"
-        placeholder = "Last Name"
-        id = "last_name"
+        placeholder = "Name"
+        id = "name"
     }
 
     private val emailElement = (document.createElement("input") as HTMLInputElement).apply {
@@ -57,15 +49,20 @@ class SignupPage(val signupPresenter: SignupPresenter) : SignupContract.View {
             textContent = "Sign Up"
         }
 
-        form.append(messageElement, lineBreak(), firstNameElement, lineBreak(), lastNameElement, lineBreak(), emailElement, lineBreak(), passwordElement, lineBreak(), submit, loginElement)
+        form.append(
+            messageElement, lineBreak(),
+            nameElement, lineBreak(),
+            emailElement, lineBreak(),
+            passwordElement, lineBreak(),
+            submit, loginElement
+        )
 
         submit.addEventListener("submit", {
             it.preventDefault()
             signupPresenter.signup(
-                    firstName = firstNameElement.value,
-                    lastName = lastNameElement.value,
-                    email = emailElement.value,
-                    password = passwordElement.value
+                name = nameElement.value,
+                email = emailElement.value,
+                password = passwordElement.value
             )
         })
         loginElement.addEventListener("click", {
@@ -84,5 +81,9 @@ class SignupPage(val signupPresenter: SignupPresenter) : SignupContract.View {
     override fun showRegistrationFailed() {
         messageElement.clear()
         messageElement.appendText("Invalid username or password.")
+    }
+
+    override fun showProgressBar() {
+        TODO("Not yet implemented")
     }
 }

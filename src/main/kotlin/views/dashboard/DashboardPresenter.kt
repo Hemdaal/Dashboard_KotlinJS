@@ -1,4 +1,4 @@
-package dashboard
+package views.dashboard
 
 class DashboardPresenter : DashboardContract.Presenter {
 

@@ -1,16 +1,14 @@
-package login
+package views.login
 
-import lineBreak
+import utils.lineBreak
 import org.w3c.dom.*
-import org.w3c.dom.events.Event
-import org.w3c.dom.events.EventListener
-import register.SignupPresenter
-import signup.SignupPage
+import views.signup.SignupPresenter
+import views.signup.SignupPage
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
 
-class LoginPage(val loginPresenter: LoginPresenter) : LoginContract.View {
+class LoginPage(private val loginPresenter: LoginPresenter) : LoginContract.View {
 
     private val content = document.getElementById("app") as HTMLDivElement
 
@@ -44,7 +42,10 @@ class LoginPage(val loginPresenter: LoginPresenter) : LoginContract.View {
         val signUp = (document.createElement("button") as HTMLButtonElement).apply {
             textContent = "Signup"
         }
-        form.append(messageElement, lineBreak(), emailElement, lineBreak(), passwordElement, lineBreak(), submit, signUp)
+        form.append(messageElement,
+            lineBreak(), emailElement,
+            lineBreak(), passwordElement,
+            lineBreak(), submit, signUp)
 
         submit.addEventListener("click", {
             it.preventDefault()

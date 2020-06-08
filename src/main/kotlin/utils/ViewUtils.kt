@@ -1,3 +1,5 @@
+package utils
+
 import org.w3c.dom.HTMLBRElement
 import kotlin.browser.document
 
