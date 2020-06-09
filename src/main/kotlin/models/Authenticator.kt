@@ -1,54 +1,45 @@
 package models
 
 import responsePojo.TokenResponse
-import wrappers.GraphQLClient
+import responsePojo.UserResponse
+import wrappers.APIClient
+import wrappers.UserSchema
 import kotlin.browser.localStorage
 
 
 class Authenticator {
 
-    private val loginSchema = """
-        {
-          login(email: {email}, password:{password}) {
-            token
-          }
-        }
-    """.trimIndent()
-
-    private val signupSchema = """
-        {
-          createUser(name:"{name}",email:"{email}", password:"{password}") {
-            token
-          }
-        }
-    """.trimIndent()
-
     private val tokenKeyStr = "token_key"
+    private val userSchema = UserSchema()
 
-    suspend fun getUser(email: String, password: String): Boolean {
-        val responseJson = GraphQLClient.performApi(
-            loginSchema,
-            mutableMapOf(
-                "email" to email,
-                "password" to password
-            )
+    suspend fun login(email: String, password: String): Boolean {
+        val responseJson = APIClient.performApi(
+            schema = userSchema.getLoginSchema(email, password),
+            authorized = false
         )
         val tokenResponse = responseJson?.unsafeCast<TokenResponse>()
-
+        saveTokenToLocalStorage(tokenResponse?.token ?: "")
         return tokenResponse?.token != null
     }
 
+    suspend fun getUser(): User? {
+        val responseJson = APIClient.performApi(
+            userSchema.getUserSchema()
+        )
+        val userResponse = responseJson?.unsafeCast<UserResponse>()
+
+        return userResponse?.let {
+            User(it.name, it.email)
+        }
+    }
+
     suspend fun createUser(name: String, email: String, password: String): Boolean {
-        val responseJson = GraphQLClient.performApi(
-            signupSchema,
-            mutableMapOf(
-                "name" to name,
-                "email" to email,
-                "password" to password
-            )
+        val responseJson = APIClient.performApi(
+            schema = userSchema.getCreateUserSchema(name, email, password),
+            authorized = false
         )
         val tokenResponse = responseJson?.unsafeCast<TokenResponse>()
-
+        saveTokenToLocalStorage(tokenResponse?.token ?: "")
         return tokenResponse?.token != null
     }
 

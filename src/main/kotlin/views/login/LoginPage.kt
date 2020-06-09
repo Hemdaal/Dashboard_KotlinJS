@@ -1,14 +1,17 @@
 package views.login
 
-import utils.lineBreak
 import org.w3c.dom.*
-import views.signup.SignupPresenter
+import utils.lineBreak
 import views.signup.SignupPage
+import views.signup.SignupPresenter
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
 
-class LoginPage(private val loginPresenter: LoginPresenter) : LoginContract.View {
+class LoginPage(
+    private val loginPresenter: LoginPresenter,
+    private val loginStateCallback: () -> Unit
+) : LoginContract.View {
 
     private val content = document.getElementById("app") as HTMLDivElement
 
@@ -42,10 +45,12 @@ class LoginPage(private val loginPresenter: LoginPresenter) : LoginContract.View
         val signUp = (document.createElement("button") as HTMLButtonElement).apply {
             textContent = "Signup"
         }
-        form.append(messageElement,
+        form.append(
+            messageElement,
             lineBreak(), emailElement,
             lineBreak(), passwordElement,
-            lineBreak(), submit, signUp)
+            lineBreak(), submit, signUp
+        )
 
         submit.addEventListener("click", {
             it.preventDefault()
@@ -54,7 +59,7 @@ class LoginPage(private val loginPresenter: LoginPresenter) : LoginContract.View
 
         signUp.addEventListener("click", {
             it.preventDefault()
-            SignupPage(SignupPresenter()).show()
+            SignupPage(SignupPresenter(), loginStateCallback).show()
         })
 
         content.clear()
@@ -62,11 +67,16 @@ class LoginPage(private val loginPresenter: LoginPresenter) : LoginContract.View
     }
 
     override fun goToDashboard() {
-        TODO("Not yet implemented")
+        loginStateCallback.invoke()
     }
 
     override fun showLoginFailed() {
         messageElement.clear()
         messageElement.appendText("Invalid username or password.")
+    }
+
+    override fun showLoading() {
+        messageElement.clear()
+        messageElement.appendText("Please wait.")
     }
 }

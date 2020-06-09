@@ -8,7 +8,10 @@ import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
 
-class SignupPage(private val signupPresenter: SignupPresenter) : SignupContract.View {
+class SignupPage(
+    private val signupPresenter: SignupPresenter,
+    private val loginStateCallback: () -> Unit
+) : SignupContract.View {
 
     private val content = document.getElementById("app") as HTMLDivElement
 
@@ -57,7 +60,7 @@ class SignupPage(private val signupPresenter: SignupPresenter) : SignupContract.
             submit, loginElement
         )
 
-        submit.addEventListener("submit", {
+        submit.addEventListener("click", {
             it.preventDefault()
             signupPresenter.signup(
                 name = nameElement.value,
@@ -67,7 +70,7 @@ class SignupPage(private val signupPresenter: SignupPresenter) : SignupContract.
         })
         loginElement.addEventListener("click", {
             it.preventDefault()
-            LoginPage(LoginPresenter()).show()
+            LoginPage(LoginPresenter(), loginStateCallback).show()
         })
 
         content.clear()
@@ -75,7 +78,7 @@ class SignupPage(private val signupPresenter: SignupPresenter) : SignupContract.
     }
 
     override fun goToDashboard() {
-        TODO("Not yet implemented")
+        loginStateCallback.invoke()
     }
 
     override fun showRegistrationFailed() {
@@ -84,6 +87,7 @@ class SignupPage(private val signupPresenter: SignupPresenter) : SignupContract.
     }
 
     override fun showProgressBar() {
-        TODO("Not yet implemented")
+        messageElement.clear()
+        messageElement.appendText("Please wait")
     }
 }

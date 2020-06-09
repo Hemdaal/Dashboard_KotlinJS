@@ -1,5 +1,11 @@
 package views.dashboard
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import models.Authenticator
+import models.Project
+
 class DashboardPresenter : DashboardContract.Presenter {
 
     private lateinit var view: DashboardContract.View
@@ -9,13 +15,33 @@ class DashboardPresenter : DashboardContract.Presenter {
     }
 
     override fun checkState() {
-        view.showLoginPage()
+
+        if (Authenticator().getToken() == null) {
+            view.showLoginPage()
+            return
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val user = Authenticator().getUser()
+            if (user == null) {
+                view.showLoginPage()
+            } else {
+                val projects = user.getProjects()
+                if (projects.isEmpty()) {
+                    view.showCreateProject()
+                } else {
+                    view.showProjects(projects)
+                }
+            }
+        }
     }
 }
 
 class DashboardContract {
     interface View {
         fun showLoginPage()
+        fun showProjects(projects: List<Project>)
+        fun showCreateProject()
     }
 
     interface Presenter {
