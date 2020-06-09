@@ -1,16 +1,15 @@
 package views.signup
 
-import utils.lineBreak
-import views.login.LoginPage
-import views.login.LoginPresenter
 import org.w3c.dom.*
+import utils.lineBreak
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
 
 class SignupPage(
     private val signupPresenter: SignupPresenter,
-    private val loginStateCallback: () -> Unit
+    private val loginStateCallback: () -> Unit,
+    private val loginCallback: () -> Unit
 ) : SignupContract.View {
 
     private val content = document.getElementById("app") as HTMLDivElement
@@ -70,7 +69,7 @@ class SignupPage(
         })
         loginElement.addEventListener("click", {
             it.preventDefault()
-            LoginPage(LoginPresenter(), loginStateCallback).show()
+            loginCallback.invoke()
         })
 
         content.clear()

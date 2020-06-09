@@ -3,16 +3,16 @@ package wrappers
 class UserSchema : GraphQLSchema() {
 
     private val loginQuery = """
-        query Login(${DVAR}email: String!, ${DVAR}password: String!) {
-            login(email: ${DVAR}email, password: ${DVAR}password) {
+        query Login(${dVar}email: String!, ${dVar}password: String!) {
+            login(email: ${dVar}email, password: ${dVar}password) {
                 token
             }
         }
     """.trimIndent()
 
     private val createUserQuery = """
-        query CreateUser(${DVAR}name: String!, ${DVAR}email: String!, ${DVAR}password: String!) {
-            createUser(name: ${DVAR}name, email: ${DVAR}email, password: ${DVAR}password) {
+        query CreateUser(${dVar}name: String!, ${dVar}email: String!, ${dVar}password: String!) {
+            createUser(name: ${dVar}name, email: ${dVar}email, password: ${dVar}password) {
                 token
             }
         }

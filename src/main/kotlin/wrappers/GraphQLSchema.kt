@@ -4,7 +4,7 @@ import kotlin.js.Json
 
 abstract class GraphQLSchema {
 
-    protected val DVAR = "$"
+    protected val dVar = "$"
 
     fun getSchema(
         operation: String,
@@ -23,7 +23,7 @@ abstract class GraphQLSchema {
         val res: dynamic = js("({})")
         for ((name, value) in map) {
             if (value is Map<*, *>) {
-                (value as Map<String, Any?>?)?.let {
+                (value as? Map<String, Any?>)?.let {
                     res[name] = json(value)
                 }
             } else {

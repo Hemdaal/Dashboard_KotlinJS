@@ -1,8 +1,8 @@
-import views.dashboard.DashboardPage
-import views.dashboard.DashboardPresenter
+import views.app.AppPage
+import views.app.AppPresenter
 
 fun main(args: Array<String>) {
-    val dashboardPresenter = DashboardPresenter()
-    val dashboardPage = DashboardPage(dashboardPresenter)
+    val dashboardPresenter = AppPresenter()
+    val dashboardPage = AppPage(dashboardPresenter)
     dashboardPage.show()
 }

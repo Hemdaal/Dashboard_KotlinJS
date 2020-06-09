@@ -1,4 +1,4 @@
-package views.dashboard
+package views.app
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -6,11 +6,11 @@ import kotlinx.coroutines.launch
 import models.Authenticator
 import models.Project
 
-class DashboardPresenter : DashboardContract.Presenter {
+class AppPresenter : AppContract.Presenter {
 
-    private lateinit var view: DashboardContract.View
+    private lateinit var view: AppContract.View
 
-    override fun onAttach(view: DashboardContract.View) {
+    override fun onAttach(view: AppContract.View) {
         this.view = view
     }
 
@@ -37,7 +37,7 @@ class DashboardPresenter : DashboardContract.Presenter {
     }
 }
 
-class DashboardContract {
+class AppContract {
     interface View {
         fun showLoginPage()
         fun showProjects(projects: List<Project>)
