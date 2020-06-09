@@ -6,6 +6,8 @@ import org.w3c.dom.HTMLDivElement
 import utils.lineBreak
 import views.appBar.AppBarPresenter
 import views.appBar.AppBarWidget
+import views.createProject.CreateProjectPage
+import views.createProject.CreateProjectPresenter
 import views.login.LoginPage
 import views.login.LoginPresenter
 import views.signup.SignupPage
@@ -71,6 +73,9 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
     }
 
     override fun showCreateProject() {
-
+        CreateProjectPage(
+            content = content,
+            createProjectPresenter = CreateProjectPresenter()
+        ).show()
     }
 }

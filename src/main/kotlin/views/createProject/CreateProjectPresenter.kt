@@ -6,6 +6,7 @@ class CreateProjectPresenter : CreateProjectContract.Presenter {
 
     override fun attach(view: CreateProjectContract.View) {
         this.view = view
+        view.showCreateProjectPage()
     }
 
     override fun createProject(name: String) {
