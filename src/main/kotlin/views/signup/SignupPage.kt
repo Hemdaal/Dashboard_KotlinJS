@@ -7,12 +7,11 @@ import kotlin.dom.appendText
 import kotlin.dom.clear
 
 class SignupPage(
+    private val content: HTMLDivElement,
     private val signupPresenter: SignupPresenter,
     private val loginStateCallback: () -> Unit,
     private val loginCallback: () -> Unit
 ) : SignupContract.View {
-
-    private val content = document.getElementById("app") as HTMLDivElement
 
     private val form = (document.createElement("form") as HTMLFormElement).apply {
         id = "signup_form"

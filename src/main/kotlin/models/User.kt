@@ -5,6 +5,6 @@ class User(
     val email: String
 ) {
     fun getProjects(): List<Project> {
-        TODO("Not yet implemented")
+        return emptyList()
     }
 }

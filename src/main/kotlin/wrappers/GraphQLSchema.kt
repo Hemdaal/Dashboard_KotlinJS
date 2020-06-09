@@ -19,13 +19,11 @@ abstract class GraphQLSchema {
         return JSON.stringify(json(jsonMap))
     }
 
-    private fun json(map: Map<String, Any?>): Json {
+    private fun json(map: Map<*, *>): Json {
         val res: dynamic = js("({})")
         for ((name, value) in map) {
             if (value is Map<*, *>) {
-                (value as? Map<String, Any?>)?.let {
-                    res[name] = json(value)
-                }
+                res[name] = json(value)
             } else {
                 res[name] = value
             }

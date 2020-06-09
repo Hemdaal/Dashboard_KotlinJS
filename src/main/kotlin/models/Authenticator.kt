@@ -1,11 +1,11 @@
 package models
 
-import responsePojo.TokenResponse
-import responsePojo.UserResponse
+import responsePojo.LoginResponse
+import responsePojo.MeResponse
+import responsePojo.SignupResponse
 import wrappers.APIClient
 import wrappers.UserSchema
 import kotlin.browser.localStorage
-
 
 class Authenticator {
 
@@ -17,18 +17,21 @@ class Authenticator {
             schema = userSchema.getLoginSchema(email, password),
             authorized = false
         )
-        val tokenResponse = responseJson?.unsafeCast<TokenResponse>()
-        saveTokenToLocalStorage(tokenResponse?.token ?: "")
-        return tokenResponse?.token != null
+        val tokenResponse = responseJson?.unsafeCast<LoginResponse.Response>()
+        val token = tokenResponse?.data?.login?.token
+        token?.let {
+            saveTokenToLocalStorage(token)
+        }
+        return token != null
     }
 
     suspend fun getUser(): User? {
         val responseJson = APIClient.performApi(
             userSchema.getUserSchema()
         )
-        val userResponse = responseJson?.unsafeCast<UserResponse>()
+        val userResponse = responseJson?.unsafeCast<MeResponse.Response>()
 
-        return userResponse?.let {
+        return userResponse?.data?.me?.let {
             User(it.name, it.email)
         }
     }
@@ -38,9 +41,10 @@ class Authenticator {
             schema = userSchema.getCreateUserSchema(name, email, password),
             authorized = false
         )
-        val tokenResponse = responseJson?.unsafeCast<TokenResponse>()
-        saveTokenToLocalStorage(tokenResponse?.token ?: "")
-        return tokenResponse?.token != null
+        val tokenResponse = responseJson?.unsafeCast<SignupResponse.Response>()
+        val token = tokenResponse?.data?.createUser?.token
+        saveTokenToLocalStorage(token ?: "")
+        return token != null
     }
 
     private fun saveTokenToLocalStorage(token: String) {

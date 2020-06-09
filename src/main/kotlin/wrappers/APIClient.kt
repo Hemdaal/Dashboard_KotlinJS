@@ -4,6 +4,7 @@ import kotlinx.coroutines.await
 import models.Authenticator
 import org.w3c.fetch.*
 import kotlin.browser.window
+import kotlin.js.Json
 
 object APIClient {
 
@@ -26,7 +27,7 @@ object APIClient {
                 }
             }
 
-            return window.fetch(
+            val result = window.fetch(
                 GRAPHQL_ENDPOINT,
                 RequestInit(
                     method = "POST",
@@ -34,7 +35,10 @@ object APIClient {
                     body = schema,
                     mode = RequestMode.Companion.CORS
                 )
-            ).await().json().await()
+            ).await()
+            if (result.ok) {
+                return result.json().await()
+            }
         } catch (e: Exception) {
 
         }
