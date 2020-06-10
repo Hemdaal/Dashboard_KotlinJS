@@ -72,7 +72,7 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
     }
 
     override fun showProjects(projects: List<Project>) {
-
+        appBarWidget.onPageChange(PageType.PROJECT)
     }
 
     override fun showCreateProject(user: User) {

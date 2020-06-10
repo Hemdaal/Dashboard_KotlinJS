@@ -32,7 +32,7 @@ class Authenticator {
         val userResponse = responseJson?.unsafeCast<MeResponse.Response>()
 
         return userResponse?.data?.me?.let {
-            User(it.name, it.email)
+            User(it.name?:"", it.email?:"")
         }
     }
 

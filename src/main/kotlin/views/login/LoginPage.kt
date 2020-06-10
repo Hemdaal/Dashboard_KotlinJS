@@ -1,7 +1,7 @@
 package views.login
 
-import org.w3c.dom.*
-import utils.lineBreak
+import org.w3c.dom.HTMLDivElement
+import utils.*
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
@@ -13,21 +13,21 @@ class LoginPage(
     private val signupCallback: () -> Unit
 ) : LoginContract.View {
 
-    private val form = (document.createElement("form") as HTMLFormElement).apply {
+    private val form = document.createForm().apply {
         id = "login_form"
     }
 
-    private val messageElement = (document.createElement("span") as HTMLSpanElement).apply {
+    private val messageElement = document.createSpan().apply {
         id = "message"
     }
 
-    private val emailElement = (document.createElement("input") as HTMLInputElement).apply {
+    private val emailElement = document.createInput().apply {
         type = "text"
         placeholder = "Email"
         id = "email"
     }
 
-    private val passwordElement = (document.createElement("input") as HTMLInputElement).apply {
+    private val passwordElement = document.createInput().apply {
         type = "password"
         placeholder = "Password"
         id = "password"
@@ -36,11 +36,11 @@ class LoginPage(
     fun show() {
         loginPresenter.attach(this)
 
-        val submit = (document.createElement("button") as HTMLButtonElement).apply {
+        val submit = document.createButton().apply {
             textContent = "Sign In"
         }
 
-        val signUp = (document.createElement("button") as HTMLButtonElement).apply {
+        val signUp = document.createButton().apply {
             textContent = "Signup"
         }
         form.append(
@@ -50,15 +50,13 @@ class LoginPage(
             lineBreak(), submit, signUp
         )
 
-        submit.addEventListener("click", {
-            it.preventDefault()
+        submit.onClick {
             loginPresenter.login(email = emailElement.value, password = passwordElement.value)
-        })
+        }
 
-        signUp.addEventListener("click", {
-            it.preventDefault()
+        signUp.onClick {
             signupCallback.invoke()
-        })
+        }
 
         content.clear()
         content.appendChild(form)

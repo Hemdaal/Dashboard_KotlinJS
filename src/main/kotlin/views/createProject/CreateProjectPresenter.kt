@@ -19,7 +19,7 @@ class CreateProjectPresenter(
 
     override fun createProject(name: String) {
         CoroutineScope(Dispatchers.Main).launch {
-            val project = user.createProject()
+            val project = user.createProject(name)
             if (project != null) {
                 view.showProjectCreated(project)
             } else {

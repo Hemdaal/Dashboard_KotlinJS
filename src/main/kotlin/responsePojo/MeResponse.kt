@@ -1,5 +1,7 @@
 package responsePojo
 
+import models.Project
+
 class MeResponse {
 
     data class Response(
@@ -11,7 +13,13 @@ class MeResponse {
     )
 
     data class Me(
-        val name: String,
-        val email: String
+        val name: String?,
+        val email: String?,
+        val createProject: CreateProject?,
+        val projects : Array<Project>?
+    )
+
+    data class CreateProject(
+        val name: String
     )
 }

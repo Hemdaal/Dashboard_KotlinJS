@@ -3,6 +3,7 @@ package views.createProject
 import models.Project
 import org.w3c.dom.*
 import utils.lineBreak
+import utils.onClick
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
@@ -36,10 +37,9 @@ class CreateProjectPage(
             textContent = "Create"
         }
 
-        submit.addEventListener("click", {
-            it.preventDefault()
+        submit.onClick {
             createProjectPresenter.createProject(name = nameElement.value)
-        })
+        }
 
         form.append(
             messageElement,

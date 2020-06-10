@@ -17,6 +17,7 @@ class AppBarPresenter : AppBarContract.Presenter {
             LOGIN -> "Login"
             SIGNUP -> "Signup"
             CREATE_PROJECT -> "Create Project"
+            PROJECT -> "Project"
         }
         view.showPageTitle(title)
     }

@@ -4,5 +4,7 @@ enum class PageType {
     APP,
     LOGIN,
     SIGNUP,
-    CREATE_PROJECT
+    CREATE_PROJECT,
+    PROJECT,
+
 }
