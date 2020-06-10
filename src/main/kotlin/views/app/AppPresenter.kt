@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import models.Authenticator
 import models.Project
+import models.User
 
 class AppPresenter : AppContract.Presenter {
 
@@ -16,7 +17,7 @@ class AppPresenter : AppContract.Presenter {
 
     override fun checkState() {
 
-        if (Authenticator().getToken() == null) {
+        if (Authenticator().getToken().isNullOrEmpty()) {
             view.showLoginPage()
             return
         }
@@ -28,7 +29,7 @@ class AppPresenter : AppContract.Presenter {
             } else {
                 val projects = user.getProjects()
                 if (projects.isEmpty()) {
-                    view.showCreateProject()
+                    view.showCreateProject(user)
                 } else {
                     view.showProjects(projects)
                 }
@@ -41,7 +42,7 @@ class AppContract {
     interface View {
         fun showLoginPage()
         fun showProjects(projects: List<Project>)
-        fun showCreateProject()
+        fun showCreateProject(user: User)
     }
 
     interface Presenter {

@@ -1,5 +1,6 @@
 package views.createProject
 
+import models.Project
 import org.w3c.dom.*
 import utils.lineBreak
 import kotlin.browser.document
@@ -8,7 +9,8 @@ import kotlin.dom.clear
 
 class CreateProjectPage(
     private val content: HTMLDivElement,
-    private val createProjectPresenter: CreateProjectContract.Presenter
+    private val createProjectPresenter: CreateProjectContract.Presenter,
+    private val projectCreatedCallback: (Project) -> Unit
 ) : CreateProjectContract.View {
 
     private val form = (document.createElement("form") as HTMLFormElement).apply {
@@ -51,6 +53,10 @@ class CreateProjectPage(
     override fun showCreateProjectFailure() {
         messageElement.clear()
         messageElement.appendText("Unable to create project")
+    }
+
+    override fun showProjectCreated(project: Project) {
+        projectCreatedCallback.invoke(project)
     }
 
 }

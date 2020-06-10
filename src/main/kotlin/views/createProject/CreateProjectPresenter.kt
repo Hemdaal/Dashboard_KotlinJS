@@ -1,6 +1,14 @@
 package views.createProject
 
-class CreateProjectPresenter : CreateProjectContract.Presenter {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import models.Project
+import models.User
+
+class CreateProjectPresenter(
+    private val user: User
+) : CreateProjectContract.Presenter {
 
     private lateinit var view: CreateProjectContract.View
 
@@ -10,7 +18,14 @@ class CreateProjectPresenter : CreateProjectContract.Presenter {
     }
 
     override fun createProject(name: String) {
-
+        CoroutineScope(Dispatchers.Main).launch {
+            val project = user.createProject()
+            if (project != null) {
+                view.showProjectCreated(project)
+            } else {
+                view.showCreateProjectFailure()
+            }
+        }
     }
 }
 
@@ -19,6 +34,7 @@ class CreateProjectContract {
     interface View {
         fun showCreateProjectPage()
         fun showCreateProjectFailure()
+        fun showProjectCreated(project: Project)
     }
 
     interface Presenter {

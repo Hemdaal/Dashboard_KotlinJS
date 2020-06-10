@@ -2,6 +2,7 @@ package views.app
 
 import constants.PageType
 import models.Project
+import models.User
 import org.w3c.dom.HTMLDivElement
 import utils.lineBreak
 import views.appBar.AppBarPresenter
@@ -10,6 +11,8 @@ import views.createProject.CreateProjectPage
 import views.createProject.CreateProjectPresenter
 import views.login.LoginPage
 import views.login.LoginPresenter
+import views.projectDetail.ProjectDetailPage
+import views.projectDetail.ProjectDetailPresenter
 import views.signup.SignupPage
 import views.signup.SignupPresenter
 import kotlin.browser.document
@@ -72,10 +75,20 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
 
     }
 
-    override fun showCreateProject() {
+    override fun showCreateProject(user: User) {
         CreateProjectPage(
             content = content,
-            createProjectPresenter = CreateProjectPresenter()
+            createProjectPresenter = CreateProjectPresenter(user),
+            projectCreatedCallback = { project ->
+                showProjectDetail(project)
+            }
+        ).show()
+    }
+
+    private fun showProjectDetail(project: Project) {
+        ProjectDetailPage(
+            content = content,
+            projectDetailPresenter = ProjectDetailPresenter()
         ).show()
     }
 }
