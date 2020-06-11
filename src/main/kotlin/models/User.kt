@@ -2,7 +2,7 @@ package models
 
 import responsePojo.MeResponse
 import wrappers.APIClient
-import wrappers.ProjectSchema
+import wrappers.graphql.ProjectSchema
 
 class User(
     val name: String,

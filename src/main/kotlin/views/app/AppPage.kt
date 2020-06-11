@@ -7,6 +7,8 @@ import org.w3c.dom.HTMLDivElement
 import utils.lineBreak
 import views.appBar.AppBarPresenter
 import views.appBar.AppBarWidget
+import views.chooseProjects.ChooseProjectPage
+import views.chooseProjects.ChooseProjectPresenter
 import views.createProject.CreateProjectPage
 import views.createProject.CreateProjectPresenter
 import views.login.LoginPage
@@ -73,6 +75,7 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
 
     override fun showProjects(projects: List<Project>) {
         appBarWidget.onPageChange(PageType.PROJECT)
+        ChooseProjectPage(content, ChooseProjectPresenter(projects)).show()
     }
 
     override fun showCreateProject(user: User) {

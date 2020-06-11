@@ -4,7 +4,7 @@ import responsePojo.LoginResponse
 import responsePojo.MeResponse
 import responsePojo.SignupResponse
 import wrappers.APIClient
-import wrappers.UserSchema
+import wrappers.graphql.UserSchema
 import kotlin.browser.localStorage
 
 class Authenticator {

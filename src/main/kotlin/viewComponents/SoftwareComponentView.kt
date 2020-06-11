@@ -11,10 +11,10 @@ class SoftwareComponentView {
     fun getView(softwareComponentName: String): HTMLElement {
         val addSoftwareCardElement = document.createDiv().apply {
             id = "software_card"
-            className = "software_card"
+            className = "card"
         }
         val addSoftwareCardContainerElement = document.createDiv().apply {
-            className = "software_card_container"
+            className = "card_container"
         }
         val titleElement = document.createH4().apply {
             appendText(softwareComponentName)

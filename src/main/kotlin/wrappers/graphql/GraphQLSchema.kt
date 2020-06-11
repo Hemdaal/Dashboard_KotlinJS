@@ -1,4 +1,4 @@
-package wrappers
+package wrappers.graphql
 
 import kotlin.js.Json
 
