@@ -31,7 +31,7 @@ class AppPresenter : AppContract.Presenter {
                 if (projects.isEmpty()) {
                     view.showCreateProject(user)
                 } else {
-                    view.showProjects(projects)
+                    view.showProjects(user, projects)
                 }
             }
         }
@@ -41,7 +41,7 @@ class AppPresenter : AppContract.Presenter {
 class AppContract {
     interface View {
         fun showLoginPage()
-        fun showProjects(projects: List<Project>)
+        fun showProjects(user: User, projects: List<Project>)
         fun showCreateProject(user: User)
     }
 

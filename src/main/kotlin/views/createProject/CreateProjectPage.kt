@@ -2,6 +2,7 @@ package views.createProject
 
 import models.Project
 import org.w3c.dom.*
+import utils.createButton
 import utils.lineBreak
 import utils.onClick
 import kotlin.browser.document
@@ -11,7 +12,8 @@ import kotlin.dom.clear
 class CreateProjectPage(
     private val content: HTMLDivElement,
     private val createProjectPresenter: CreateProjectContract.Presenter,
-    private val projectCreatedCallback: (Project) -> Unit
+    private val projectCreatedCallback: (Project) -> Unit,
+    private val cancelledCallback: (() -> Unit)? = null
 ) : CreateProjectContract.View {
 
     private val form = (document.createElement("form") as HTMLFormElement).apply {
@@ -37,6 +39,10 @@ class CreateProjectPage(
             textContent = "Create"
         }
 
+        val cancelBtn = document.createButton().apply {
+            textContent = "Cancel"
+        }
+
         submit.onClick {
             createProjectPresenter.createProject(name = nameElement.value)
         }
@@ -44,10 +50,19 @@ class CreateProjectPage(
         form.append(
             messageElement,
             lineBreak(), nameElement,
-            lineBreak(), submit
+            lineBreak(), cancelBtn, submit
         )
         content.clear()
         content.appendChild(form)
+
+        if (cancelledCallback == null) {
+            cancelBtn.disabled = true
+        } else {
+            cancelBtn.disabled = false
+            cancelBtn.onClick {
+                cancelledCallback.invoke()
+            }
+        }
     }
 
     override fun showCreateProjectFailure() {

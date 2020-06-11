@@ -73,18 +73,37 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
         ).show()
     }
 
-    override fun showProjects(projects: List<Project>) {
+    override fun showProjects(user: User, projects: List<Project>) {
         appBarWidget.onPageChange(PageType.PROJECT)
-        ChooseProjectPage(content, ChooseProjectPresenter(projects)).show()
+        ChooseProjectPage(
+            content = content,
+            chooseProjectPresenter = ChooseProjectPresenter(projects),
+            onAddProjectClick = {
+                showCreateProject(
+                    user = user,
+                    cancelCallback = {
+                        showProjects(user, projects)
+                    }
+                )
+            },
+            onProjectClick = {
+                showProjectDetail(it)
+            }
+        ).show()
     }
 
     override fun showCreateProject(user: User) {
+        showCreateProject(user)
+    }
+
+    private fun showCreateProject(user: User, cancelCallback: (() -> Unit)? = null) {
         CreateProjectPage(
             content = content,
             createProjectPresenter = CreateProjectPresenter(user),
             projectCreatedCallback = { project ->
                 showProjectDetail(project)
-            }
+            },
+            cancelledCallback = cancelCallback
         ).show()
     }
 
