@@ -95,8 +95,20 @@ fun Document.createH4(text: String = "") = (createElement("h4") as HTMLHeadingEl
     textContent = text
 }
 
-fun Document.createLink(text: String = "") = (createElement("a")).apply {
+fun Document.createLink(text: String = "") = (createElement("a") as HTMLAnchorElement).apply {
     if (text.isNotEmpty()) {
         textContent = text
     }
+}
+
+fun Document.createList() = (createElement("div") as HTMLDivElement).apply {
+    className = "list-group list-group-flush"
+}
+
+fun Document.createListItem() = (createElement("div") as HTMLDivElement).apply {
+    className = "list-group-item"
+}
+
+fun Document.createActionListItem() = (createElement("a") as HTMLAnchorElement).apply {
+    className = "list-group-item list-group-item-action"
 }

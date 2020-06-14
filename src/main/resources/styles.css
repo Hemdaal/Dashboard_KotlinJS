@@ -3,3 +3,7 @@ body {
     text-align: center;
 }
 
+.card.project {
+    width: 40%;
+}
+

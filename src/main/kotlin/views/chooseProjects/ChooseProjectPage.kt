@@ -2,9 +2,7 @@ package views.chooseProjects
 
 import models.Project
 import org.w3c.dom.HTMLDivElement
-import utils.createDiv
-import utils.createH4
-import utils.createIcon
+import utils.*
 import kotlin.browser.document
 import kotlin.dom.clear
 
@@ -23,24 +21,27 @@ class ChooseProjectPage(
 
     override fun showProjects(projects: List<Project>) {
         content.clear()
-        projects.forEach { project ->
-            val card = document.createDiv().apply {
-                className = "card text-center"
-                appendChild(document.createDiv().apply {
-                    className = "card-body"
-                    appendChild(document.createH4(project.name))
-                })
-            }
-            content.appendChild(card)
-        }
         val card = document.createDiv().apply {
-            className = "card text-center"
-            appendChild(document.createDiv().apply {
-                className = "card-body"
-                appendChild(document.createIcon("plus"))
-                appendChild(document.createH4("Create Project"))
-            })
+            className = "card project text-center mx-auto"
         }
+        val list = document.createList()
+        card.appendChild(list)
+        projects.forEach { project ->
+            val item = document.createActionListItem().apply {
+                textContent = project.name
+                onClick {
+                    onProjectClick(project)
+                }
+            }
+            list.appendChild(item)
+        }
+        val item = document.createActionListItem().apply {
+            textContent = "Create Project"
+            onClick {
+                onAddProjectClick()
+            }
+        }
+        list.appendChild(item)
         content.appendChild(card)
     }
 }
