@@ -110,7 +110,7 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
     private fun showProjectDetail(project: Project) {
         ProjectDetailPage(
             content = content,
-            projectDetailPresenter = ProjectDetailPresenter()
+            projectDetailPresenter = ProjectDetailPresenter(project)
         ).show()
     }
 }
