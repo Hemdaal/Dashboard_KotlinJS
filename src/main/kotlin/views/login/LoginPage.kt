@@ -15,6 +15,8 @@ class LoginPage(
 
     private val form = document.createForm()
 
+    private lateinit var progressCallback: (Boolean) -> Unit
+
     private val messageElement = document.createSpan().apply {
         id = "message"
     }
@@ -30,7 +32,9 @@ class LoginPage(
     fun show() {
         loginPresenter.attach(this)
 
-        val submit = document.createButton("Sign In")
+        val submit = document.createButton("Sign In") {
+            progressCallback = it
+        }
         val signUp = document.createBorderButton("Sign Up")
 
         form.append(
@@ -62,10 +66,11 @@ class LoginPage(
     override fun showLoginFailed() {
         messageElement.clear()
         messageElement.appendText("Invalid username or password.")
+        progressCallback(false)
     }
 
     override fun showLoading() {
         messageElement.clear()
-        messageElement.appendText("Please wait.")
+        progressCallback(true)
     }
 }

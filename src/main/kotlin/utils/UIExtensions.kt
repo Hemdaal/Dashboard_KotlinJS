@@ -53,11 +53,25 @@ fun Document.createInput(hint: String = "") = (createElement("input") as HTMLInp
 fun Document.createLineBreak() = createElement("br") as HTMLBRElement
 fun Document.createDiv() = createElement("div") as HTMLDivElement
 fun Document.createSpan() = createElement("span") as HTMLSpanElement
-fun Document.createButton(text: String = "") = (createElement("button") as HTMLButtonElement).apply {
-    className = "btn btn-primary mr-2"
-    type = "button"
-    textContent = text
-}
+fun Document.createButton(text: String = "", callback: ((progressCallback: (Boolean) -> Unit) -> Unit)? = null) =
+    (createElement("button") as HTMLButtonElement).apply {
+        className = "btn btn-primary mr-2"
+        type = "button"
+        textContent = text
+        val span = createSpan()
+        appendChild(span)
+        callback?.invoke {
+            if (it) {
+                span.className = "spinner-grow spinner-grow-sm"
+                span.textContent = " "
+                this.disabled = true
+            } else {
+                span.className = ""
+                span.textContent = ""
+                this.disabled = false
+            }
+        }
+    }
 
 fun Document.createBorderButton(text: String) = (createElement("button") as HTMLButtonElement).apply {
     className = "btn btn-outline-primary mr-2"
