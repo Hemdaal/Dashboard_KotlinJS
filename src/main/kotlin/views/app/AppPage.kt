@@ -79,7 +79,7 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
             content = content,
             chooseProjectPresenter = ChooseProjectPresenter(projects),
             onAddProjectClick = {
-                showCreateProject(
+                showCreateProjectPage(
                     user = user,
                     cancelCallback = {
                         showProjects(user, projects)
@@ -93,10 +93,11 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
     }
 
     override fun showCreateProject(user: User) {
-        showCreateProject(user)
+        showCreateProjectPage(user)
     }
 
-    private fun showCreateProject(user: User, cancelCallback: (() -> Unit)? = null) {
+    private fun showCreateProjectPage(user: User, cancelCallback: (() -> Unit)? = null) {
+        appBarWidget.onPageChange(PageType.CREATE_PROJECT)
         CreateProjectPage(
             content = content,
             createProjectPresenter = CreateProjectPresenter(user),

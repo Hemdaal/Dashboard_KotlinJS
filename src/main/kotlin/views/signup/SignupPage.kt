@@ -15,6 +15,8 @@ class SignupPage(
 
     private val form = document.createForm()
 
+    private lateinit var progressCallback : (Boolean) -> Unit
+
     private val messageElement = document.createElement("span") as HTMLSpanElement
 
     private val nameElement = document.createInput("Name").apply {
@@ -33,7 +35,9 @@ class SignupPage(
         signupPresenter.attach(this)
 
         val loginElement = document.createBorderButton("Login")
-        val submit = document.createButton("Sign up")
+        val submit = document.createButton("Sign up") {
+            progressCallback = it
+        }
 
         form.append(
             messageElement, document.createLineBreak(),
@@ -70,10 +74,11 @@ class SignupPage(
     override fun showRegistrationFailed() {
         messageElement.clear()
         messageElement.appendText("Invalid username or password.")
+        progressCallback.invoke(false)
     }
 
     override fun showProgressBar() {
         messageElement.clear()
-        messageElement.appendText("Please wait")
+        progressCallback.invoke(true)
     }
 }
