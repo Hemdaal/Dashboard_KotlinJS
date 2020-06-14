@@ -25,7 +25,9 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
     private val toolBar = document.createNav("Hemdaal")
     private val content = document.createPageContainer()
 
-    private val appBarWidget = AppBarWidget(toolBar, AppBarPresenter())
+    private val appBarWidget = AppBarWidget(toolBar, AppBarPresenter()) {
+        appPresenter.checkState()
+    }
 
     fun show() {
         val appPage = document.getElementById("app") as HTMLDivElement
@@ -94,6 +96,10 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
 
     override fun showCreateProject(user: User) {
         showCreateProjectPage(user)
+    }
+
+    override fun setUserInNavBar(user: User) {
+        appBarWidget.onSignIn(user)
     }
 
     private fun showCreateProjectPage(user: User, cancelCallback: (() -> Unit)? = null) {

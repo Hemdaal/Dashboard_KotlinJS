@@ -16,9 +16,7 @@ class ProjectListView {
         val projectItemCardContainerElement = document.createDiv().apply {
             className = "card_container"
         }
-        val titleElement = document.createH4().apply {
-            appendText(projectName)
-        }
+        val titleElement = document.createH4(projectName)
 
         projectItemCardElement.appendChild(projectItemCardContainerElement)
         projectItemCardContainerElement.appendChild(titleElement)

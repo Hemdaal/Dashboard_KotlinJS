@@ -3,10 +3,8 @@ package views.chooseProjects
 import models.Project
 import org.w3c.dom.HTMLDivElement
 import utils.createDiv
-import utils.createLineBreak
-import utils.onClick
-import viewComponents.AddProjectView
-import viewComponents.ProjectListView
+import utils.createH4
+import utils.createIcon
 import kotlin.browser.document
 import kotlin.dom.clear
 
@@ -17,28 +15,32 @@ class ChooseProjectPage(
     private val onProjectClick: (project: Project) -> Unit
 ) : ChooseProjectContract.View {
 
-    private val projectsElement = document.createDiv()
 
     fun show() {
         content.clear()
-        content.appendChild(projectsElement)
         chooseProjectPresenter.attach(this)
     }
 
     override fun showProjects(projects: List<Project>) {
-        projectsElement.clear()
-        val addProjectView = AddProjectView().getView()
-        addProjectView.onClick {
-            onAddProjectClick.invoke()
-        }
-        projectsElement.appendChild(addProjectView)
-        projects.forEach {
-            projectsElement.appendChild(document.createLineBreak())
-            val projectView = ProjectListView().getView(it.name)
-            projectView.onClick {
-                onProjectClick(it)
+        content.clear()
+        projects.forEach { project ->
+            val card = document.createDiv().apply {
+                className = "card text-center"
+                appendChild(document.createDiv().apply {
+                    className = "card-body"
+                    appendChild(document.createH4(project.name))
+                })
             }
-            projectsElement.appendChild(projectView)
+            content.appendChild(card)
         }
+        val card = document.createDiv().apply {
+            className = "card text-center"
+            appendChild(document.createDiv().apply {
+                className = "card-body"
+                appendChild(document.createIcon("plus"))
+                appendChild(document.createH4("Create Project"))
+            })
+        }
+        content.appendChild(card)
     }
 }

@@ -83,7 +83,20 @@ fun Document.createSpinner() = (createElement("div") as HTMLDivElement).apply {
     className = "spinner-grow text-primary"
 }
 
-fun Document.createH1() = createElement("h1") as HTMLHeadingElement
-fun Document.createH2() = createElement("h2") as HTMLHeadingElement
-fun Document.createH3() = createElement("h3") as HTMLHeadingElement
-fun Document.createH4() = createElement("h4") as HTMLHeadingElement
+fun Document.createIcon(iconName: String) = createElement("i").apply {
+    className = "fas fa-$iconName"
+}
+
+fun Document.createH2(text: String = "") = (createElement("h2") as HTMLHeadingElement).apply {
+    textContent = text
+}
+
+fun Document.createH4(text: String = "") = (createElement("h4") as HTMLHeadingElement).apply {
+    textContent = text
+}
+
+fun Document.createLink(text: String = "") = (createElement("a")).apply {
+    if (text.isNotEmpty()) {
+        textContent = text
+    }
+}

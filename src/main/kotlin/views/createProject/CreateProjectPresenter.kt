@@ -18,6 +18,7 @@ class CreateProjectPresenter(
     }
 
     override fun createProject(name: String) {
+        view.showLoading()
         CoroutineScope(Dispatchers.Main).launch {
             val project = user.createProject(name)
             if (project != null) {
@@ -32,6 +33,7 @@ class CreateProjectPresenter(
 class CreateProjectContract {
 
     interface View {
+        fun showLoading()
         fun showCreateProjectPage()
         fun showCreateProjectFailure()
         fun showProjectCreated(project: Project)

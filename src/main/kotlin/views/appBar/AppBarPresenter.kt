@@ -2,6 +2,7 @@ package views.appBar
 
 import constants.PageType
 import constants.PageType.*
+import models.User
 
 class AppBarPresenter : AppBarContract.Presenter {
 
@@ -21,17 +22,22 @@ class AppBarPresenter : AppBarContract.Presenter {
         }
         view.showPageTitle(title)
     }
+
+    override fun setUser(user: User) {
+        view.showUserAvatar(user)
+    }
 }
 
 class AppBarContract {
 
     interface View {
         fun showPageTitle(title: String)
-        fun showUserAvatar()
+        fun showUserAvatar(user: User)
     }
 
     interface Presenter {
         fun attach(view: View)
         fun setPageType(pageType: PageType)
+        fun setUser(user: User)
     }
 }

@@ -28,6 +28,7 @@ class AppPresenter : AppContract.Presenter {
             if (user == null) {
                 view.showLoginPage()
             } else {
+                view.setUserInNavBar(user)
                 val projects = user.getProjects()
                 if (projects.isEmpty()) {
                     view.showCreateProject(user)
@@ -45,6 +46,7 @@ class AppContract {
         fun showLoginPage()
         fun showProjects(user: User, projects: List<Project>)
         fun showCreateProject(user: User)
+        fun setUserInNavBar(user: User)
     }
 
     interface Presenter {

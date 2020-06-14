@@ -8,7 +8,6 @@ class ChooseProjectPresenter(private val projects: List<Project>) : ChooseProjec
 
     override fun attach(view: ChooseProjectContract.View) {
         this.view = view
-
         view.showProjects(projects)
     }
 }

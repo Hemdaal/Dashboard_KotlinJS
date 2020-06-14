@@ -16,9 +16,7 @@ class AddSoftwareComponentView {
         val addSoftwareCardContainerElement = document.createDiv().apply {
             className = "card_container"
         }
-        val titleElement = document.createH4().apply {
-            appendText("Add Software")
-        }
+        val titleElement = document.createH4("Add Software")
 
         addSoftwareCardElement.appendChild(addSoftwareCardContainerElement)
         addSoftwareCardContainerElement.appendChild(titleElement)
