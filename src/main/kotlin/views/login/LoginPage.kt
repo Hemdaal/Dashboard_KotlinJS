@@ -13,41 +13,30 @@ class LoginPage(
     private val signupCallback: () -> Unit
 ) : LoginContract.View {
 
-    private val form = document.createForm().apply {
-        id = "login_form"
-    }
+    private val form = document.createForm()
 
     private val messageElement = document.createSpan().apply {
         id = "message"
     }
 
-    private val emailElement = document.createInput().apply {
+    private val emailElement = document.createInput("Email").apply {
         type = "text"
-        placeholder = "Email"
-        id = "email"
     }
 
-    private val passwordElement = document.createInput().apply {
+    private val passwordElement = document.createInput("Password").apply {
         type = "password"
-        placeholder = "Password"
-        id = "password"
     }
 
     fun show() {
         loginPresenter.attach(this)
 
-        val submit = document.createButton().apply {
-            textContent = "Sign In"
-        }
+        val submit = document.createButton("Sign In")
+        val signUp = document.createBorderButton("Sign Up")
 
-        val signUp = document.createButton().apply {
-            textContent = "Signup"
-        }
         form.append(
-            messageElement,
-            lineBreak(), emailElement,
-            lineBreak(), passwordElement,
-            lineBreak(), submit, signUp
+            messageElement, document.createLineBreak(),
+            emailElement, document.createLineBreak(),
+            passwordElement, document.createLineBreak()
         )
 
         submit.onClick {
@@ -60,6 +49,10 @@ class LoginPage(
 
         content.clear()
         content.appendChild(form)
+        val buttonContainer = document.createContainer()
+        content.appendChild(buttonContainer)
+
+        buttonContainer.append(submit, signUp)
     }
 
     override fun goToDashboard() {

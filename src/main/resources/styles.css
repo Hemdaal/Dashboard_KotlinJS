@@ -3,30 +3,6 @@ body {
     text-align: center;
 }
 
-.header {
-    float: left;
-    margin: 0;
-    overflow: hidden;
-    position: fixed;
-    padding-left: 16px;
-    padding-top: 16px;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 46px;
-    color: #fff;
-    font-size: 24px;
-    background-color: #1976D2;
-    text-align: left;
-    z-index: 1;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.28);
-}
-.content {
-    margin: auto;
-    width: 80%;
-    padding-top: 60px;
-}
-
 .card {
  /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);

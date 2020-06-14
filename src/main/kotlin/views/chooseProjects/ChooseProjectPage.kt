@@ -3,7 +3,7 @@ package views.chooseProjects
 import models.Project
 import org.w3c.dom.HTMLDivElement
 import utils.createDiv
-import utils.lineBreak
+import utils.createLineBreak
 import utils.onClick
 import viewComponents.AddProjectView
 import viewComponents.ProjectListView
@@ -33,7 +33,7 @@ class ChooseProjectPage(
         }
         projectsElement.appendChild(addProjectView)
         projects.forEach {
-            projectsElement.appendChild(lineBreak())
+            projectsElement.appendChild(document.createLineBreak())
             val projectView = ProjectListView().getView(it.name)
             projectView.onClick {
                 onProjectClick(it)

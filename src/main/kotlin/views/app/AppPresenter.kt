@@ -16,7 +16,8 @@ class AppPresenter : AppContract.Presenter {
     }
 
     override fun checkState() {
-
+        view.showLoading()
+        view.showLoading()
         if (Authenticator().getToken().isNullOrEmpty()) {
             view.showLoginPage()
             return
@@ -40,6 +41,7 @@ class AppPresenter : AppContract.Presenter {
 
 class AppContract {
     interface View {
+        fun showLoading()
         fun showLoginPage()
         fun showProjects(user: User, projects: List<Project>)
         fun showCreateProject(user: User)

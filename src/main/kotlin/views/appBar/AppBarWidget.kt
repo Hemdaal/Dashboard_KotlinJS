@@ -1,18 +1,17 @@
 package views.appBar
 
 import constants.PageType
-import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
+import utils.createNavBarText
 import kotlin.browser.document
 
 class AppBarWidget(
-    private val toolBarElement: HTMLDivElement,
+    private val toolBarElement: Element,
     private val appBarPresenter: AppBarContract.Presenter
 ) : AppBarContract.View {
 
-    private val titleElement = (document.createElement("a") as HTMLElement).apply {
-        id = "title"
-    }
+    private val titleElement = document.createNavBarText()
 
     fun show() {
         toolBarElement.appendChild(titleElement)
@@ -20,7 +19,7 @@ class AppBarWidget(
     }
 
     override fun showPageTitle(title: String) {
-        titleElement.innerText = title
+        titleElement.textContent = title
     }
 
     override fun showUserAvatar() {

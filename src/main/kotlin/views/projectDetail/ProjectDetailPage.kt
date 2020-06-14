@@ -5,7 +5,7 @@ import models.SoftwareComponent
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.createDiv
-import utils.lineBreak
+import utils.createLineBreak
 import utils.onClick
 import viewComponents.AddSoftwareComponentView
 import viewComponents.SoftwareComponentView
@@ -52,7 +52,7 @@ class ProjectDetailPage(
         content.appendChild(softwareComponentsElement)
         projectInfoElement.clear()
         projectInfoElement.appendChild(titleElement)
-        projectInfoElement.appendChild(lineBreak())
+        projectInfoElement.appendChild(document.createLineBreak())
         projectInfoElement.appendChild(addSoftwareComponentView)
     }
 

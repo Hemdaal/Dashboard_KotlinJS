@@ -3,7 +3,7 @@ package views.createProject
 import models.Project
 import org.w3c.dom.*
 import utils.createButton
-import utils.lineBreak
+import utils.createLineBreak
 import utils.onClick
 import kotlin.browser.document
 import kotlin.dom.appendText
@@ -35,13 +35,8 @@ class CreateProjectPage(
     }
 
     override fun showCreateProjectPage() {
-        val submit = (document.createElement("button") as HTMLButtonElement).apply {
-            textContent = "Create"
-        }
-
-        val cancelBtn = document.createButton().apply {
-            textContent = "Cancel"
-        }
+        val submit = document.createButton("Create")
+        val cancelBtn = document.createButton("Cancel")
 
         submit.onClick {
             createProjectPresenter.createProject(name = nameElement.value)
@@ -49,8 +44,8 @@ class CreateProjectPage(
 
         form.append(
             messageElement,
-            lineBreak(), nameElement,
-            lineBreak(), cancelBtn, submit
+            document.createLineBreak(), nameElement,
+            document.createLineBreak(), cancelBtn, submit
         )
         content.clear()
         content.appendChild(form)

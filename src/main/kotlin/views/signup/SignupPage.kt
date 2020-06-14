@@ -1,7 +1,7 @@
 package views.signup
 
 import org.w3c.dom.*
-import utils.lineBreak
+import utils.*
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
@@ -13,49 +13,33 @@ class SignupPage(
     private val loginCallback: () -> Unit
 ) : SignupContract.View {
 
-    private val form = (document.createElement("form") as HTMLFormElement).apply {
-        id = "signup_form"
-    }
+    private val form = document.createForm()
 
-    private val messageElement = (document.createElement("span") as HTMLSpanElement).apply {
-        id = "message"
-    }
+    private val messageElement = document.createElement("span") as HTMLSpanElement
 
-    private val nameElement = (document.createElement("input") as HTMLInputElement).apply {
+    private val nameElement = document.createInput("Name").apply {
         type = "text"
-        placeholder = "Name"
-        id = "name"
     }
 
-    private val emailElement = (document.createElement("input") as HTMLInputElement).apply {
+    private val emailElement = document.createInput("Email").apply {
         type = "text"
-        placeholder = "Email"
-        id = "email"
     }
 
-    private val passwordElement = (document.createElement("input") as HTMLInputElement).apply {
+    private val passwordElement = document.createInput("Password").apply {
         type = "password"
-        placeholder = "Password"
-        id = "password"
     }
 
     fun show() {
         signupPresenter.attach(this)
 
-        val loginElement = (document.createElement("button") as HTMLButtonElement).apply {
-            textContent = "Login"
-        }
-
-        val submit = (document.createElement("button") as HTMLButtonElement).apply {
-            textContent = "Sign Up"
-        }
+        val loginElement = document.createBorderButton("Login")
+        val submit = document.createButton("Sign up")
 
         form.append(
-            messageElement, lineBreak(),
-            nameElement, lineBreak(),
-            emailElement, lineBreak(),
-            passwordElement, lineBreak(),
-            submit, loginElement
+            messageElement, document.createLineBreak(),
+            nameElement, document.createLineBreak(),
+            emailElement, document.createLineBreak(),
+            passwordElement, document.createLineBreak()
         )
 
         submit.addEventListener("click", {
@@ -73,6 +57,10 @@ class SignupPage(
 
         content.clear()
         content.appendChild(form)
+        val buttonContainer = document.createContainer()
+        content.appendChild(buttonContainer)
+
+        buttonContainer.append(submit, loginElement)
     }
 
     override fun goToDashboard() {

@@ -4,7 +4,7 @@ import constants.PageType
 import models.Project
 import models.User
 import org.w3c.dom.HTMLDivElement
-import utils.lineBreak
+import utils.*
 import views.appBar.AppBarPresenter
 import views.appBar.AppBarWidget
 import views.chooseProjects.ChooseProjectPage
@@ -18,24 +18,19 @@ import views.projectDetail.ProjectDetailPresenter
 import views.signup.SignupPage
 import views.signup.SignupPresenter
 import kotlin.browser.document
+import kotlin.dom.clear
 
 class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.View {
 
-    private val toolBar = (document.createElement("div") as HTMLDivElement).apply {
-        id = "header"
-        className = "header"
-    }
-    private val content = (document.createElement("div") as HTMLDivElement).apply {
-        id = "content"
-        className = "content"
-    }
+    private val toolBar = document.createNav("Hemdaal")
+    private val content = document.createPageContainer()
 
     private val appBarWidget = AppBarWidget(toolBar, AppBarPresenter())
 
     fun show() {
         val appPage = document.getElementById("app") as HTMLDivElement
         appPage.appendChild(toolBar)
-        appPage.appendChild(lineBreak())
+        appPage.appendChild(document.createLineBreak())
         appPage.appendChild(content)
 
         appBarWidget.show()
@@ -43,6 +38,11 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
 
         appPresenter.onAttach(this)
         appPresenter.checkState()
+    }
+
+    override fun showLoading() {
+        content.clear()
+        content.append(document.createSpinner())
     }
 
     override fun showLoginPage() {

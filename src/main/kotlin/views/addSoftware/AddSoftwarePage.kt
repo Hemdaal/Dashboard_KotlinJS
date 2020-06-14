@@ -20,18 +20,10 @@ class AddSoftwarePage(
     override fun showForm() {
         content.clear()
         val form = document.createForm()
-        val nameElement = document.createInput().apply {
-            placeholder = "Name"
-        }
-        val gitHubUrlElement = document.createInput().apply {
-            placeholder = "Github link"
-        }
-        val addButton = document.createButton().apply {
-            textContent = "Add"
-        }
-        val cancelButton = document.createButton().apply {
-            textContent = "Cancel"
-        }
+        val nameElement = document.createInput("Name")
+        val gitHubUrlElement = document.createInput("Github Link")
+        val addButton = document.createButton("Add")
+        val cancelButton = document.createButton("Cancel")
 
         cancelButton.onClick {
             cancelCallback.invoke()
@@ -42,8 +34,8 @@ class AddSoftwarePage(
         }
 
         form.append(
-            nameElement, lineBreak(),
-            gitHubUrlElement, lineBreak(),
+            nameElement, document.createLineBreak(),
+            gitHubUrlElement, document.createLineBreak(),
             cancelButton, addButton
         )
 
