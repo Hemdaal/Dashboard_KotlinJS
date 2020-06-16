@@ -4,7 +4,6 @@ import org.w3c.dom.HTMLElement
 import utils.createDiv
 import utils.createH4
 import kotlin.browser.document
-import kotlin.dom.appendText
 
 class AddSoftwareComponentView {
 

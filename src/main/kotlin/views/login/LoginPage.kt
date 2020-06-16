@@ -5,6 +5,8 @@ import utils.*
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
+import kotlinx.html.*
+import kotlinx.html.dom.*
 
 class LoginPage(
     private val content: HTMLDivElement,
