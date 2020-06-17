@@ -1,22 +1,14 @@
 package views.chooseProjects
 
+import kotlinx.html.*
 import kotlinx.html.dom.append
-import kotlinx.html.i
-import kotlinx.html.id
 import kotlinx.html.js.div
-import kotlinx.html.js.li
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.js.ul
-import kotlinx.html.style
-import kotlinx.html.ul
 import models.Project
 import mvp.Page
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLUListElement
-import utils.*
 import kotlin.browser.document
-import kotlin.dom.clear
 
 class ChooseProjectPage(
     presenter: ChooseProjectPresenter,
@@ -25,12 +17,12 @@ class ChooseProjectPage(
 ) : Page<ChooseProjectContract, ChooseProjectPresenter>(presenter), ChooseProjectContract {
 
     private val chooseProjectDiv by lazy {
-        document.getElementById("choose_project_div") as HTMLUListElement
+        document.getElementById("choose_project_div") as HTMLDivElement
     }
 
     override fun onCreate(content: HTMLElement) {
         content.append.div("d-flex justify-content-center") {
-            ul("list-group ") {
+            div("list-group") {
                 id = "choose_project_div"
                 style = """
                 width: 40%;
@@ -41,7 +33,10 @@ class ChooseProjectPage(
 
     override fun showProjects(projects: List<Project>) {
         projects.forEach { project ->
-            chooseProjectDiv.append.li("list-group-item d-flex justify-content-between align-items-center") {
+            chooseProjectDiv.append.a(
+                href = "#",
+                classes = "list-group-item list-group-item-action list-group-item-light d-flex justify-content-between align-items-center"
+            ) {
                 +project.name
                 i("fas fa-chevron-right") {
 
@@ -52,7 +47,10 @@ class ChooseProjectPage(
                 }
             }
         }
-        chooseProjectDiv.append.li("list-group-item d-flex justify-content-between align-items-center") {
+        chooseProjectDiv.append.a(
+            href = "#",
+            classes = "list-group-item list-group-item-action list-group-item-light d-flex justify-content-between align-items-center"
+        ) {
             +"Create Project"
             i("fas fa-plus-square") {
 
