@@ -1,70 +1,92 @@
 package views.signup
 
+import kotlinx.html.*
+import kotlinx.html.dom.append
+import mvp.Page
 import org.w3c.dom.*
 import utils.*
 import kotlin.browser.document
-import kotlin.dom.appendText
-import kotlin.dom.clear
 
 class SignupPage(
-    private val content: HTMLDivElement,
-    private val signupPresenter: SignupPresenter,
+    presenter: SignupPresenter,
     private val loginStateCallback: () -> Unit,
     private val loginCallback: () -> Unit
-) : SignupContract.View {
+) : Page<SignupContract, SignupPresenter>(presenter), SignupContract {
 
-    private val form = document.createForm()
-
-    private lateinit var progressCallback : (Boolean) -> Unit
-
-    private val messageElement = document.createElement("span") as HTMLSpanElement
-
-    private val nameElement = document.createInput("Name").apply {
-        type = "text"
+    private val alertMessageElement by lazy {
+        document.getElementById("alert_text") as HTMLElement
     }
 
-    private val emailElement = document.createInput("Email").apply {
-        type = "text"
+    private val signupButton by lazy {
+        document.getElementById("register_btn") as HTMLButtonElement
     }
 
-    private val passwordElement = document.createInput("Password").apply {
-        type = "password"
+    private val signupLoader by lazy {
+        document.getElementById("login_loader") as HTMLElement
     }
 
-    fun show() {
-        signupPresenter.attach(this)
-
-        val loginElement = document.createBorderButton("Login")
-        val submit = document.createButton("Sign up") {
-            progressCallback = it
+    override fun onCreate(content: HTMLElement) {
+        content.append.div("d-flex justify-content-center") {
+            div {
+                form {
+                    div("alert alert-danger fade") {
+                        id = "alert_text"
+                        role = "alert"
+                    }
+                    div("form-group") {
+                        input(type = InputType.text, classes = "form-control") {
+                            id = "name_text"
+                            placeholder = "Name"
+                        }
+                    }
+                    div("form-group") {
+                        input(type = InputType.email, classes = "form-control") {
+                            id = "email_text"
+                            placeholder = "Email Address"
+                        }
+                    }
+                    div("form-group") {
+                        input(type = InputType.password, classes = "form-control") {
+                            id = "password_text"
+                            placeholder = "Password"
+                        }
+                    }
+                    div("button-group d-flex") {
+                        role = "group"
+                        button(type = ButtonType.button, classes = "btn btn-primary flex-fill") {
+                            id = "register_btn"
+                            span {
+                                id = "login_loader"
+                            }
+                            +"Signup"
+                            style = """
+                                margin-right: 4px
+                            """.trimIndent()
+                        }
+                        button(type = ButtonType.button, classes = "btn btn-outline-primary flex-fill") {
+                            id = "login_btn"
+                            +"Login"
+                            style = """
+                                margin-left: 4px
+                            """.trimIndent()
+                        }
+                    }
+                }
+            }
         }
 
-        form.append(
-            messageElement, document.createLineBreak(),
-            nameElement, document.createLineBreak(),
-            emailElement, document.createLineBreak(),
-            passwordElement, document.createLineBreak()
-        )
+        val nameText = document.getElementById("name_text") as HTMLInputElement
+        val emailText = document.getElementById("email_text") as HTMLInputElement
+        val passwordText = document.getElementById("password_text") as HTMLInputElement
+        val loginButton = document.getElementById("login_btn") as HTMLElement
 
-        submit.addEventListener("click", {
-            it.preventDefault()
-            signupPresenter.signup(
-                name = nameElement.value,
-                email = emailElement.value,
-                password = passwordElement.value
-            )
-        })
-        loginElement.addEventListener("click", {
-            it.preventDefault()
-            loginCallback.invoke()
-        })
+        signupButton.onClick {
+            getPresenter().signup(nameText.value, emailText.value, passwordText.value)
+        }
 
-        content.clear()
-        content.appendChild(form)
-        val buttonContainer = document.createContainer()
-        content.appendChild(buttonContainer)
-
-        buttonContainer.append(submit, loginElement)
+        loginButton.onClick {
+            loginCallback()
+        }
     }
 
     override fun goToDashboard() {
@@ -72,13 +94,18 @@ class SignupPage(
     }
 
     override fun showRegistrationFailed() {
-        messageElement.clear()
-        messageElement.appendText("Invalid username or password.")
-        progressCallback.invoke(false)
+        alertMessageElement.className = "alert alert-danger show"
+        alertMessageElement.textContent = "Unable to Login"
+        signupLoader.className = ""
+        signupButton.disabled = false
     }
 
     override fun showProgressBar() {
-        messageElement.clear()
-        progressCallback.invoke(true)
+        alertMessageElement.className = "alert alert-danger fade"
+        alertMessageElement.textContent = ""
+        signupLoader.className = "spinner-grow spinner-grow-sm show"
+        signupButton.disabled = true
     }
+
+    override fun getContract() = this
 }

@@ -15,6 +15,8 @@ import views.appBar.AppBarPage
 import views.appBar.AppBarPresenter
 import views.login.LoginPage
 import views.login.LoginPresenter
+import views.signup.SignupPage
+import views.signup.SignupPresenter
 import kotlin.browser.document
 
 class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(presenter), AppPageContract {
@@ -57,10 +59,11 @@ class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(pre
                 getPresenter().checkState()
             },
             signupCallback = {
-                showLoginPage()
+                showSignupPage()
             }
         ))
     }
+
 
     override fun showProjects(user: User, projects: List<Project>) {
         //TODO
@@ -74,97 +77,18 @@ class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(pre
         appParPage.onSignIn(user)
     }
 
-    /* fun show() {
-         document.getElementById("app")?.apply {
-             appendChild(toolBar)
-             appendChild(document.createLineBreak())
-             appendChild(content)
-         }
+    private fun showSignupPage() {
+        appParPage.onPageChange(PageType.SIGNUP)
+        container.replace(SignupPage(
+            presenter = SignupPresenter(),
+            loginStateCallback = {
+                getPresenter().checkState()
+            },
+            loginCallback = {
+                showLoginPage()
+            }
+        ))
+    }
 
-         appBarWidget.show()
-         appBarWidget.onPageChange(PageType.APP)
-
-         getPresenter().checkState()
-     }*/
-
-    /*   override fun showLoading() {
-           content.clear()
-           content.append(document.createSpinner())
-       }
-
-       override fun showLoginPage() {
-           appBarWidget.onPageChange(PageType.LOGIN)
-           LoginPage(
-               content = content,
-               loginPresenter = LoginPresenter(),
-               loginStateCallback = {
-                   getPresenter().checkState()
-               },
-               signupCallback = {
-                   showSignupPage()
-               }
-           )
-       }
-
-       private fun showSignupPage() {
-           appBarWidget.onPageChange(PageType.SIGNUP)
-           SignupPage(
-               content = content,
-               signupPresenter = SignupPresenter(),
-               loginStateCallback = {
-                   getPresenter().checkState()
-               },
-               loginCallback = {
-                   showLoginPage()
-               }
-           ).show()
-       }
-
-       override fun showProjects(user: User, projects: List<Project>) {
-           appBarWidget.onPageChange(PageType.PROJECT)
-           ChooseProjectPage(
-               content = content,
-               chooseProjectPresenter = ChooseProjectPresenter(projects),
-               onAddProjectClick = {
-                   showCreateProjectPage(
-                       user = user,
-                       cancelCallback = {
-                           showProjects(user, projects)
-                       }
-                   )
-               },
-               onProjectClick = {
-                   showProjectDetail(it)
-               }
-           ).show()
-       }
-
-       override fun showCreateProject(user: User) {
-           showCreateProjectPage(user)
-       }
-
-       override fun setUserInNavBar(user: User) {
-           appBarWidget.onSignIn(user)
-       }
-
-       private fun showCreateProjectPage(user: User, cancelCallback: (() -> Unit)? = null) {
-           appBarWidget.onPageChange(PageType.CREATE_PROJECT)
-           CreateProjectPage(
-               content = content,
-               createProjectPresenter = CreateProjectPresenter(user),
-               projectCreatedCallback = { project ->
-                   showProjectDetail(project)
-               },
-               cancelledCallback = cancelCallback
-           ).show()
-       }
-
-       private fun showProjectDetail(project: Project) {
-           ProjectDetailPage(
-               content = content,
-               projectDetailPresenter = ProjectDetailPresenter(project)
-           ).show()
-       }
-   */
     override fun getContract() = this
 }
