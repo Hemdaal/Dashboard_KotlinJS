@@ -7,32 +7,31 @@ import kotlin.dom.appendText
 import kotlin.dom.clear
 import kotlinx.html.*
 import kotlinx.html.dom.*
+import kotlinx.html.js.onClickFunction
+import mvp.Page
+import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLInputElement
 
 class LoginPage(
-    private val content: HTMLDivElement,
-    private val loginPresenter: LoginPresenter,
+    presenter: LoginPresenter,
     private val loginStateCallback: () -> Unit,
     private val signupCallback: () -> Unit
-) : LoginContract.View {
+) : Page<LoginContract, LoginPresenter>(presenter), LoginContract {
 
-    private val form = document.createForm()
-
-    private lateinit var progressCallback: (Boolean) -> Unit
-
-    private val messageElement = document.createSpan()
-
-    private val emailElement = document.createInput("Email").apply {
-        type = "text"
+    private val alertMessageElement by lazy {
+        document.getElementById("alert_text") as HTMLElement
     }
 
-    private val passwordElement = document.createInput("Password").apply {
-        type = "password"
+    private val loginButton by lazy {
+        document.getElementById("login_btn") as HTMLButtonElement
     }
 
-    fun show() {
-        loginPresenter.attach(this)
+    private val loginLoader by lazy {
+        document.getElementById("login_loader") as HTMLElement
+    }
 
-        content.clear()
+    override fun onCreate(content: HTMLElement) {
         content.append.div("d-flex justify-content-center") {
             div {
                 form {
@@ -56,6 +55,9 @@ class LoginPage(
                         role = "group"
                         button(type = ButtonType.button, classes = "btn btn-primary flex-fill") {
                             id = "login_btn"
+                            span {
+                                id = "login_loader"
+                            }
                             +"Login"
                             style = """
                                 margin-right: 4px
@@ -73,32 +75,17 @@ class LoginPage(
             }
         }
 
+        val emailText = document.getElementById("email_text") as HTMLInputElement
+        val passwordText = document.getElementById("password_text") as HTMLInputElement
+        val signupButton = document.getElementById("register_btn") as HTMLElement
 
-//        val submit = document.createButton("Sign In") {
-//            progressCallback = it
-//        }
-//        val signUp = document.createBorderButton("Sign Up")
-//
-//        form.append(
-//            messageElement, document.createLineBreak(),
-//            emailElement, document.createLineBreak(),
-//            passwordElement, document.createLineBreak()
-//        )
-//
-//        submit.onClick {
-//            loginPresenter.login(email = emailElement.value, password = passwordElement.value)
-//        }
-//
-//        signUp.onClick {
-//            signupCallback.invoke()
-//        }
-//
-//        content.clear()
-//        content.appendChild(form)
-//        val buttonContainer = document.createContainer()
-//        content.appendChild(buttonContainer)
-//
-//        buttonContainer.append(submit, signUp)
+        loginButton.onClick {
+            getPresenter().login(emailText.value, passwordText.value)
+        }
+
+        signupButton.onClick {
+            signupCallback()
+        }
     }
 
     override fun goToDashboard() {
@@ -106,13 +93,19 @@ class LoginPage(
     }
 
     override fun showLoginFailed() {
-        messageElement.clear()
-        messageElement.appendText("Invalid username or password.")
-        progressCallback(false)
+        alertMessageElement.className = "alert alert-danger show"
+        alertMessageElement.textContent = "Unable to Login"
+        loginLoader.className = ""
+        loginButton.disabled = false
     }
 
     override fun showLoading() {
-        messageElement.clear()
-        progressCallback(true)
+        alertMessageElement.className = "alert alert-danger fade"
+        alertMessageElement.textContent = ""
+        loginLoader.className = "spinner-grow spinner-grow-sm show"
+        loginButton.disabled = true
     }
+
+
+    override fun getContract() = this
 }

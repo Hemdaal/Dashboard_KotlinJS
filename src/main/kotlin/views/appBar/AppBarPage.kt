@@ -29,11 +29,17 @@ class AppBarPage(
 
     override fun onCreate(content: HTMLElement) {
         content.append.div {
-            span("navbar-text") {
-                id = "title_text"
-            }
-            h2("badge badge-pill badge-light navbar-nav ml-auto") {
-                id = "user_avatar"
+            nav("navbar navbar-expand-sm bg-primary navbar-dark sticky-top") {
+                id = "toolbar"
+                a(classes = "navbar-brand", href = "#") {
+                    +"Hemdaal"
+                }
+                span("navbar-text") {
+                    id = "title_text"
+                }
+                h2("badge badge-pill badge-light navbar-nav ml-auto") {
+                    id = "user_avatar"
+                }
             }
         }
 

@@ -4,39 +4,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import models.Authenticator
+import mvp.Presenter
 
-class LoginPresenter: LoginContract.Presenter {
+class LoginPresenter: Presenter<LoginContract>() {
 
-    private lateinit var view: LoginContract.View
-
-    override fun attach(view: LoginContract.View) {
-        this.view = view
-    }
-
-    override fun login(email: String, password: String) {
-        view.showLoading()
+    fun login(email: String, password: String) {
+        contract.showLoading()
         CoroutineScope(Dispatchers.Main).launch {
             val loginStatus = Authenticator().login(email, password)
 
             if(loginStatus) {
-                view.goToDashboard()
+                contract.goToDashboard()
             } else {
-                view.showLoginFailed()
+                contract.showLoginFailed()
             }
         }
-    }
-}
-
-class LoginContract {
-
-    interface View {
-        fun goToDashboard()
-        fun showLoginFailed()
-        fun showLoading()
-    }
-
-    interface Presenter {
-        fun attach(view: View)
-        fun login(email: String, password: String)
     }
 }

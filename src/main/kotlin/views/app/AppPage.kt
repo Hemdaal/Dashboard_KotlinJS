@@ -1,30 +1,28 @@
 package views.app
 
 import constants.PageType
+import kotlinx.html.a
+import kotlinx.html.div
+import kotlinx.html.dom.append
+import kotlinx.html.id
+import kotlinx.html.nav
 import models.Project
 import models.User
 import mvp.Page
-import utils.*
-import views.chooseProjects.ChooseProjectPage
-import views.chooseProjects.ChooseProjectPresenter
-import views.createProject.CreateProjectPage
-import views.createProject.CreateProjectPresenter
+import org.w3c.dom.HTMLElement
+import utils.replace
+import views.appBar.AppBarPage
+import views.appBar.AppBarPresenter
 import views.login.LoginPage
 import views.login.LoginPresenter
-import views.projectDetail.ProjectDetailPage
-import views.projectDetail.ProjectDetailPresenter
-import views.signup.SignupPage
-import views.signup.SignupPresenter
 import kotlin.browser.document
-import kotlinx.html.*
-import kotlinx.html.dom.*
-import org.w3c.dom.HTMLElement
-import kotlin.dom.clear
 
-class AppPage(appPresenter: AppPresenter) : Page<AppPageContract, AppPresenter>(appPresenter), AppPageContract {
+class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(presenter), AppPageContract {
+
+    private lateinit var appParPage: AppBarPage
 
     private val toolBar by lazy {
-        document.getElementById("toobar") as HTMLElement
+        document.getElementById("toolbar") as HTMLElement
     }
 
     private val container by lazy {
@@ -33,19 +31,48 @@ class AppPage(appPresenter: AppPresenter) : Page<AppPageContract, AppPresenter>(
 
     override fun onCreate(content: HTMLElement) {
         content.append.div {
-            nav("navbar navbar-expand-sm bg-primary navbar-dark sticky-top") {
+            div {
                 id = "toolbar"
-                a(classes = "navbar-brand", href = "#") {
-                    +"Hemdaal"
-                }
             }
             div("container p-3 my-3 bg-white text-black") {
                 id = "container"
 
             }
         }
+        appParPage = AppBarPage(AppBarPresenter()) {
+            getPresenter().checkState()
+        }
+        toolBar.replace(appParPage)
     }
 
+    override fun showLoading() {
+        container.replace().div("spinner-grow text-primary")
+    }
+
+    override fun showLoginPage() {
+        appParPage.onPageChange(PageType.LOGIN)
+        container.replace(LoginPage(
+            presenter = LoginPresenter(),
+            loginStateCallback = {
+                getPresenter().checkState()
+            },
+            signupCallback = {
+                showLoginPage()
+            }
+        ))
+    }
+
+    override fun showProjects(user: User, projects: List<Project>) {
+        //TODO
+    }
+
+    override fun showCreateProject(user: User) {
+        //TODO
+    }
+
+    override fun setUserInNavBar(user: User) {
+        appParPage.onSignIn(user)
+    }
 
     /* fun show() {
          document.getElementById("app")?.apply {
@@ -140,23 +167,4 @@ class AppPage(appPresenter: AppPresenter) : Page<AppPageContract, AppPresenter>(
        }
    */
     override fun getContract() = this
-    override fun showLoading() {
-        container.replace().div("spinner-grow text-primary")
-    }
-
-    override fun showLoginPage() {
-        //TODO
-    }
-
-    override fun showProjects(user: User, projects: List<Project>) {
-        //TODO
-    }
-
-    override fun showCreateProject(user: User) {
-        //TODO
-    }
-
-    override fun setUserInNavBar(user: User) {
-
-    }
 }
