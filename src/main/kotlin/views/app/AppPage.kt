@@ -13,6 +13,8 @@ import org.w3c.dom.HTMLElement
 import utils.replace
 import views.appBar.AppBarPage
 import views.appBar.AppBarPresenter
+import views.createProject.CreateProjectPage
+import views.createProject.CreateProjectPresenter
 import views.login.LoginPage
 import views.login.LoginPresenter
 import views.signup.SignupPage
@@ -70,7 +72,15 @@ class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(pre
     }
 
     override fun showCreateProject(user: User) {
-        //TODO
+        container.replace(CreateProjectPage(
+            presenter = CreateProjectPresenter(user),
+            projectCreatedCallback = {
+
+            },
+            cancelledCallback = {
+
+            }
+        ))
     }
 
     override fun setUserInNavBar(user: User) {

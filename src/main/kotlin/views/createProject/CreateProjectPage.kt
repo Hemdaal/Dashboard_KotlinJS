@@ -1,72 +1,68 @@
 package views.createProject
 
+import kotlinx.html.*
+import kotlinx.html.dom.append
+import kotlinx.html.js.div
 import models.Project
+import mvp.Page
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
 import utils.*
 import kotlin.browser.document
 import kotlin.dom.appendText
 import kotlin.dom.clear
 
 class CreateProjectPage(
-    private val content: HTMLDivElement,
-    private val createProjectPresenter: CreateProjectContract.Presenter,
+    presenter: CreateProjectPresenter,
     private val projectCreatedCallback: (Project) -> Unit,
     private val cancelledCallback: (() -> Unit)? = null
-) : CreateProjectContract.View {
+) : Page<CreatePageContract, CreateProjectPresenter>(presenter), CreatePageContract {
 
-    private val form = document.createForm()
+    override fun onCreate(content: HTMLElement) {
+        content.append.div("d-flex justify-content-center") {
+            div {
+                form {
+                    div("alert alert-danger fade") {
+                        id = "alert_text"
+                        role = "alert"
+                    }
+                    div("form-group") {
+                        input(type = InputType.text, classes = "form-control") {
+                            id = "name_text"
+                            placeholder = "Project Name"
+                        }
+                    }
+                    div("form-check") {
+                        label("form-check-label") {
+                            input(type = InputType.checkBox, classes = "form-check-input") {
+                                attributes["data-toggle"] = "collapse"
+                                attributes["data-target"] = "#project_management_div"
+                            }
+                            +"Project Management"
+                        }
+                    }
+                    div("collapse") {
+                        id = "project_management_div"
+                        hr("my-3")
 
-    private val messageElement = document.createSpan()
-
-    private val nameElement = document.createInput("Project Name")
-
-    private lateinit var progressCallback: (Boolean) -> Unit
-
-    fun show() {
-        createProjectPresenter.attach(this)
-    }
-
-    override fun showCreateProjectPage() {
-        val submit = document.createButton("Create") {
-            progressCallback = it
-        }
-        val cancelBtn = document.createBorderButton("Cancel")
-
-        submit.onClick {
-            createProjectPresenter.createProject(name = nameElement.value)
-        }
-
-        form.append(
-            messageElement, document.createLineBreak(),
-            nameElement, document.createLineBreak(),
-            cancelBtn, submit
-        )
-        content.clear()
-        content.appendChild(form)
-
-        if (cancelledCallback == null) {
-            cancelBtn.disabled = true
-        } else {
-            cancelBtn.disabled = false
-            cancelBtn.onClick {
-                cancelledCallback.invoke()
+                    }
+                }
             }
         }
     }
 
+    override fun getContract() = this
+
+    override fun showLoading() {
+        TODO("Not yet implemented")
+    }
+
     override fun showCreateProjectFailure() {
-        messageElement.clear()
-        messageElement.appendText("Unable to create project")
-        progressCallback.invoke(false)
+        TODO("Not yet implemented")
     }
 
     override fun showProjectCreated(project: Project) {
-        projectCreatedCallback.invoke(project)
-    }
-
-    override fun showLoading() {
-        messageElement.clear()
-        progressCallback.invoke(true)
+        TODO("Not yet implemented")
     }
 
 }

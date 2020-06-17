@@ -5,42 +5,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import models.Project
 import models.User
+import mvp.Presenter
 
 class CreateProjectPresenter(
     private val user: User
-) : CreateProjectContract.Presenter {
+) : Presenter<CreatePageContract>() {
 
-    private lateinit var view: CreateProjectContract.View
-
-    override fun attach(view: CreateProjectContract.View) {
-        this.view = view
-        view.showCreateProjectPage()
-    }
-
-    override fun createProject(name: String) {
-        view.showLoading()
+    fun createProject(name: String) {
+        contract.showLoading()
         CoroutineScope(Dispatchers.Main).launch {
             val project = user.createProject(name)
             if (project != null) {
-                view.showProjectCreated(project)
+                contract.showProjectCreated(project)
             } else {
-                view.showCreateProjectFailure()
+                contract.showCreateProjectFailure()
             }
         }
-    }
-}
-
-class CreateProjectContract {
-
-    interface View {
-        fun showLoading()
-        fun showCreateProjectPage()
-        fun showCreateProjectFailure()
-        fun showProjectCreated(project: Project)
-    }
-
-    interface Presenter {
-        fun attach(view: View)
-        fun createProject(name: String)
     }
 }
