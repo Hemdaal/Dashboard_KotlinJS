@@ -1,47 +1,67 @@
 package views.chooseProjects
 
+import kotlinx.html.dom.append
+import kotlinx.html.i
+import kotlinx.html.id
+import kotlinx.html.js.div
+import kotlinx.html.js.li
+import kotlinx.html.js.onClickFunction
+import kotlinx.html.js.ul
+import kotlinx.html.style
+import kotlinx.html.ul
 import models.Project
+import mvp.Page
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLUListElement
 import utils.*
 import kotlin.browser.document
 import kotlin.dom.clear
 
 class ChooseProjectPage(
-    private val content: HTMLDivElement,
-    private val chooseProjectPresenter: ChooseProjectPresenter,
+    presenter: ChooseProjectPresenter,
     private val onAddProjectClick: () -> Unit,
     private val onProjectClick: (project: Project) -> Unit
-) : ChooseProjectContract.View {
+) : Page<ChooseProjectContract, ChooseProjectPresenter>(presenter), ChooseProjectContract {
 
+    private val chooseProjectDiv by lazy {
+        document.getElementById("choose_project_div") as HTMLUListElement
+    }
 
-    fun show() {
-        content.clear()
-        chooseProjectPresenter.attach(this)
+    override fun onCreate(content: HTMLElement) {
+        content.append.div("d-flex justify-content-center") {
+            ul("list-group ") {
+                id = "choose_project_div"
+                style = """
+                width: 40%;
+            """.trimIndent()
+            }
+        }
     }
 
     override fun showProjects(projects: List<Project>) {
-        content.clear()
-        val card = document.createDiv().apply {
-            className = "card project text-center mx-auto"
-        }
-        val list = document.createList()
-        card.appendChild(list)
         projects.forEach { project ->
-            val item = document.createActionListItem().apply {
-                textContent = project.name
-                onClick {
+            chooseProjectDiv.append.li("list-group-item d-flex justify-content-between align-items-center") {
+                +project.name
+                i("fas fa-chevron-right") {
+
+                }
+
+                onClickFunction = {
                     onProjectClick(project)
                 }
             }
-            list.appendChild(item)
         }
-        val item = document.createActionListItem().apply {
-            textContent = "Create Project"
-            onClick {
+        chooseProjectDiv.append.li("list-group-item d-flex justify-content-between align-items-center") {
+            +"Create Project"
+            i("fas fa-plus-square") {
+
+            }
+            onClickFunction = {
                 onAddProjectClick()
             }
         }
-        list.appendChild(item)
-        content.appendChild(card)
     }
+
+    override fun getContract() = this
 }

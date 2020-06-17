@@ -1,24 +1,12 @@
 package views.chooseProjects
 
 import models.Project
+import mvp.Presenter
 
-class ChooseProjectPresenter(private val projects: List<Project>) : ChooseProjectContract.Presenter {
+class ChooseProjectPresenter(private val projects: List<Project>) : Presenter<ChooseProjectContract>() {
 
-    private lateinit var view: ChooseProjectContract.View
-
-    override fun attach(view: ChooseProjectContract.View) {
-        this.view = view
-        view.showProjects(projects)
-    }
-}
-
-class ChooseProjectContract {
-
-    interface View {
-        fun showProjects(projects: List<Project>)
-    }
-
-    interface Presenter {
-        fun attach(view: View)
+    override fun onAttached() {
+        super.onAttached()
+        contract.showProjects(projects)
     }
 }

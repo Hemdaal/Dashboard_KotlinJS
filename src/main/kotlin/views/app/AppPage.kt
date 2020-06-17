@@ -13,6 +13,8 @@ import org.w3c.dom.HTMLElement
 import utils.replace
 import views.appBar.AppBarPage
 import views.appBar.AppBarPresenter
+import views.chooseProjects.ChooseProjectPage
+import views.chooseProjects.ChooseProjectPresenter
 import views.createProject.CreateProjectPage
 import views.createProject.CreateProjectPresenter
 import views.login.LoginPage
@@ -68,7 +70,16 @@ class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(pre
 
 
     override fun showProjects(user: User, projects: List<Project>) {
-        //TODO
+        appParPage.onPageChange(PageType.PROJECT)
+        container.replace(ChooseProjectPage(
+            presenter = ChooseProjectPresenter(projects),
+            onProjectClick = {
+
+            },
+            onAddProjectClick = {
+                showCreateProject(user)
+            }
+        ))
     }
 
     override fun showCreateProject(user: User) {
