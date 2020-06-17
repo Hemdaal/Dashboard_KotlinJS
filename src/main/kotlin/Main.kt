@@ -1,8 +1,9 @@
+import org.w3c.dom.HTMLElement
+import utils.replace
 import views.app.AppPage
 import views.app.AppPresenter
+import kotlin.browser.document
 
 fun main() {
-    val appPresenter = AppPresenter()
-    val appPage = AppPage(appPresenter)
-    appPage.show()
+    (document.getElementById("app") as? HTMLElement)?.replace(AppPage(AppPresenter()))
 }

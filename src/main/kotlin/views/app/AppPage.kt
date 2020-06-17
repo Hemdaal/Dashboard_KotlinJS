@@ -3,7 +3,10 @@ package views.app
 import constants.PageType
 import models.Project
 import models.User
+import mvp.Page
+import org.w3c.dom.Element
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.get
 import utils.*
 import views.appBar.AppBarPresenter
 import views.appBar.AppBarWidget
@@ -19,10 +22,20 @@ import views.signup.SignupPage
 import views.signup.SignupPresenter
 import kotlin.browser.document
 import kotlin.dom.clear
+import kotlinx.html.*
+import kotlinx.html.dom.*
+import org.w3c.dom.HTMLElement
 
-class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.View {
+class AppPage(appPresenter: AppPresenter) : Page<AppPageContract, AppPresenter>(appPresenter), AppPageContract {
 
-    private val toolBar = document.createNav("Hemdaal")
+    private val toolBar by lazy {
+        document.getElementById("toobar") as HTMLElement
+    }
+
+    private val container by lazy {
+        document.getElementById("container") as HTMLElement
+    }
+
     private val content = document.createPageContainer()
 
     private val appBarWidget = AppBarWidget(toolBar, AppBarPresenter()) {
@@ -30,16 +43,16 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
     }
 
     fun show() {
-        val appPage = document.getElementById("app") as HTMLDivElement
-        appPage.appendChild(toolBar)
-        appPage.appendChild(document.createLineBreak())
-        appPage.appendChild(content)
+        document.getElementById("app")?.apply {
+            appendChild(toolBar)
+            appendChild(document.createLineBreak())
+            appendChild(content)
+        }
 
         appBarWidget.show()
         appBarWidget.onPageChange(PageType.APP)
 
-        appPresenter.onAttach(this)
-        appPresenter.checkState()
+        getPresenter().checkState()
     }
 
     override fun showLoading() {
@@ -120,4 +133,20 @@ class AppPage(private val appPresenter: AppContract.Presenter) : AppContract.Vie
             projectDetailPresenter = ProjectDetailPresenter(project)
         ).show()
     }
+
+    override fun onCreate(content: HTMLElement) {
+        content.append.div {
+            nav("navbar navbar-expand-sm bg-primary navbar-dark sticky-top") {
+                id = "toolbar"
+                a(classes = "navbar-brand", href = "#") {
+                    +"Hemdaal"
+                }
+            }
+            div("container p-3 my-3 bg-white text-black") {
+                id = "container"
+            }
+        }
+    }
+
+    override fun getContract() = this
 }

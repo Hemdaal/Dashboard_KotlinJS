@@ -2,13 +2,6 @@ package utils
 
 import org.w3c.dom.*
 
-fun HTMLElement.onClick(clickCallback: () -> Unit) {
-    addEventListener("click", {
-        it.preventDefault()
-        clickCallback.invoke()
-    })
-}
-
 fun Document.createPageContainer() = (createElement("div") as HTMLDivElement).apply {
     className = "container p-3 my-3 bg-white text-black"
 }

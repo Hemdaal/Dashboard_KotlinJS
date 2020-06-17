@@ -4,53 +4,35 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import models.Authenticator
-import models.Project
-import models.User
+import mvp.Presenter
 
-class AppPresenter : AppContract.Presenter {
+class AppPresenter : Presenter<AppPageContract>() {
 
-    private lateinit var view: AppContract.View
-
-    override fun onAttach(view: AppContract.View) {
-        this.view = view
-    }
-
-    override fun checkState() {
-        view.showLoading()
-        view.showLoading()
+    fun checkState() {
+        contract.showLoading()
+        contract.showLoading()
         if (Authenticator().getToken().isNullOrEmpty()) {
-            view.showLoginPage()
+            contract.showLoginPage()
             return
         }
 
         CoroutineScope(Dispatchers.Main).launch {
             val user = Authenticator().getUser()
             if (user == null) {
-                view.showLoginPage()
+                contract.showLoginPage()
             } else {
-                view.setUserInNavBar(user)
+                contract.setUserInNavBar(user)
                 val projects = user.getProjects()
                 if (projects.isEmpty()) {
-                    view.showCreateProject(user)
+                    contract.showCreateProject(user)
                 } else {
-                    view.showProjects(user, projects)
+                    contract.showProjects(user, projects)
                 }
             }
         }
     }
-}
 
-class AppContract {
-    interface View {
-        fun showLoading()
-        fun showLoginPage()
-        fun showProjects(user: User, projects: List<Project>)
-        fun showCreateProject(user: User)
-        fun setUserInNavBar(user: User)
-    }
-
-    interface Presenter {
-        fun onAttach(view: View)
-        fun checkState()
+    override fun onAttached() {
+        checkState()
     }
 }
