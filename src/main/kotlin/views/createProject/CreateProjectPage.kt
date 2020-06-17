@@ -85,6 +85,9 @@ class CreateProjectPage(
                     }
                     div("button-group d-flex") {
                         role = "group"
+                        style = """
+                            margin-top: 12px;
+                        """.trimIndent()
                         button(type = ButtonType.button, classes = "btn btn-primary flex-fill") {
                             id = "create_btn"
                             span {
