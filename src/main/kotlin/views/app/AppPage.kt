@@ -19,6 +19,8 @@ import views.createProject.CreateProjectPage
 import views.createProject.CreateProjectPresenter
 import views.login.LoginPage
 import views.login.LoginPresenter
+import views.projectDetail.ProjectDetailPage
+import views.projectDetail.ProjectDetailPresenter
 import views.signup.SignupPage
 import views.signup.SignupPresenter
 import kotlin.browser.document
@@ -74,12 +76,20 @@ class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(pre
         container.replace(ChooseProjectPage(
             presenter = ChooseProjectPresenter(projects),
             onProjectClick = {
-
+                showProjectDetailPage(it)
             },
             onAddProjectClick = {
                 showCreateProject(user)
             }
         ))
+    }
+
+    private fun showProjectDetailPage(project: Project) {
+        container.replace(
+            ProjectDetailPage(
+                presenter = ProjectDetailPresenter(project)
+            )
+        )
     }
 
     override fun showCreateProject(user: User) {
@@ -89,7 +99,7 @@ class AppPage(presenter: AppPresenter) : Page<AppPageContract, AppPresenter>(pre
 
             },
             cancelledCallback = {
-
+                getPresenter().checkState()
             }
         ))
     }
