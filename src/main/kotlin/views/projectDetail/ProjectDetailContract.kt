@@ -1,8 +1,9 @@
 package views.projectDetail
 
+import models.Project
 import models.SoftwareComponent
 import mvp.PageContract
 
 interface ProjectDetailContract : PageContract {
-    fun showSoftwareComponents(softwareComponents : List<SoftwareComponent>)
+    fun showProjectDetails(project: Project, softwareComponents : List<SoftwareComponent>)
 }
