@@ -1,10 +1,7 @@
 package views.projectDetail
 
-import kotlinx.html.a
-import kotlinx.html.div
+import kotlinx.html.*
 import kotlinx.html.dom.append
-import kotlinx.html.i
-import kotlinx.html.id
 import kotlinx.html.js.div
 import kotlinx.html.js.onClickFunction
 import models.Project
@@ -36,9 +33,22 @@ class ProjectDetailPage(
 
     override fun showProjectDetails(project: Project, softwareComponents: List<SoftwareComponent>) {
         projectDetailDiv.clear()
+        softwareComponents.forEach {
+            projectDetailDiv.append.div {
+                div("card") {
+                    a(href = "#", classes = "list-group-item-light card-body d-flex justify-content-between align-items-center") {
+                        +it.name
+                        i("fas fa-chevron-right")
+                    }
+                    onClickFunction = {
+                        showAddSoftwarePage(project)
+                    }
+                }
+            }
+        }
         projectDetailDiv.append.div() {
             div("card") {
-                a(href = "#", classes = "card-body d-flex justify-content-between align-items-center") {
+                a(href = "#", classes = "list-group-item-light card-body d-flex justify-content-between align-items-center") {
                     +"Add Software Component"
                     i("fas fa-plus-square")
                 }
@@ -59,5 +69,9 @@ class ProjectDetailPage(
                 getPresenter().addSoftwareCanceled()
             }
         ))
+    }
+
+    private fun showSoftwareDetailPage(softwareComponent: SoftwareComponent) {
+        //TODO
     }
 }
